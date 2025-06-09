@@ -121,6 +121,12 @@ public class CPTJason {
                 for (int i = 0; i < intNumQuestions; i++) {
                     con.setDrawColor(Color.BLACK);
                     con.clear();
+                    con.print("User:" + strName);
+                    con.print("   Test:" + quizName );
+                    con.print("   Score:" + intScore + "/"+ i); 
+                    int intBScore = intPercentageScore(intScore, i);
+                    con.println("Percentage score" + intBScore +"%");
+        
                     con.println("Q" + (i + 1) + ": " + strQuiz[i][0]);
                     con.println("A) " + strQuiz[i][1]);
                     con.println("B) " + strQuiz[i][2]);
@@ -229,6 +235,7 @@ public class CPTJason {
                 con.setDrawColor(Color.BLACK);
                 con.clear();
                 con.drawImage(imgHelpBKG, 0, 0);
+                con.println("\n\n\n\n\n\n\n");
                 con.println("Help Section:");
                 con.println("- Enter your username to begin.");
                 con.println("- Choose a quiz topic.");
@@ -256,5 +263,12 @@ public class CPTJason {
                 con.sleep(1500);
             }
         }
+       }
+       public static int intPercentageScore(int intScore, int i) {
+    int intBScore = 0;
+    if (i != 0) {
+        intBScore = (intScore * 100) / i;
     }
+    return intBScore;
+}
 }
