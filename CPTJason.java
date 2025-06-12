@@ -49,10 +49,10 @@ public class CPTJason {
         int intQuizchoice = 0;
         String strquizName = "";
 
-        boolean running = true; // Controls main game loop
+        boolean blnrunning = true; // Controls main game loop
         Random random = new Random(); // Random number generator
 
-        while (running) {
+        while (blnrunning) {
             con.setTextColor(Color.BLACK); // Set text color
             con.setDrawColor(Color.BLACK); // Set draw color
             con.clear(); // Clear screen
@@ -104,21 +104,21 @@ public class CPTJason {
                 strquizName = strQuizchoices[intQuizchoice - 1]; // Save selected quiz name
 
                 // Select quiz file based on choice
-                String selectedQuizFile = "";
+                String strselectedQuizFile = "";
                 if (intQuizchoice == 1) {
-                    selectedQuizFile = "Calc.txt";
+                    strselectedQuizFile = "Calc.txt";
                     con.drawImage(imgChoice1BKG, 0, 0);
                 } else if (intQuizchoice == 2) {
-                    selectedQuizFile = "Vectors.txt";
+                    strselectedQuizFile = "Vectors.txt";
                     con.drawImage(imgChoice2BKG, 0, 0);
                 } else if (intQuizchoice == 3) {
-                    selectedQuizFile = "Both.txt";
+                    strselectedQuizFile = "Both.txt";
                     con.drawImage(imgChoice3BKG, 0, 0);
                 }
 
                 // Count number of questions
                 con.clear();
-                TextInputFile quiz = new TextInputFile(selectedQuizFile);
+                TextInputFile quiz = new TextInputFile(strselectedQuizFile);
                 int intNumQuestions = 0;
                 while (!quiz.eof()) {
                     quiz.readLine(); // Read lines to count
@@ -129,7 +129,7 @@ public class CPTJason {
 
                 // Load questions into array
                 String[][] strQuiz = new String[intNumQuestions][7];
-                TextInputFile quiz2 = new TextInputFile(selectedQuizFile);
+                TextInputFile quiz2 = new TextInputFile(strselectedQuizFile);
                 for (int i = 0; i < intNumQuestions; i++) {
                     for (int j = 0; j < 6; j++) {
                         strQuiz[i][j] = quiz2.readLine(); // Read question data
@@ -178,8 +178,8 @@ public class CPTJason {
                 }
 
                 // Post-game menu
-                boolean postGame = true;
-                while (postGame) {
+                boolean blnpostGame = true;
+                while (blnpostGame) {
                     con.setDrawColor(Color.BLACK);
                     con.clear();
                     con.drawImage(imgScoreBKG, 0, 0);
@@ -190,20 +190,20 @@ public class CPTJason {
                     con.println("Press M to return to the main menu and save your score.");
                     con.println("Press E to exit without saving.");
 
-                    String postGameInput = con.readLine(); // Get post-game input
+                    String strpostGameInput = con.readLine(); // Get post-game input
 
-                    if (postGameInput.equalsIgnoreCase("M")) {
+                    if (strpostGameInput.equalsIgnoreCase("M")) {
                         TextOutputFile writer = new TextOutputFile("HighScore.txt", true);
                         writer.println(strName + "," + strquizName + "," + intPercentage); // Save score
                         writer.close();
                         con.println("Score saved! Returning to main menu...");
                         con.sleep(1500);
-                        postGame = false;
-                    } else if (postGameInput.equalsIgnoreCase("E")) {
+                        blnpostGame = false;
+                    } else if (strpostGameInput.equalsIgnoreCase("E")) {
                         con.println("Thanks for playing!");
                         con.sleep(1500);
-                        running = false;
-                        postGame = false;
+                        blnrunning = false;
+                        blnpostGame = false;
                     } else {
                         con.println("Invalid input. Please try again.");
                         con.sleep(1000);
@@ -220,9 +220,9 @@ public class CPTJason {
                 int count = 0;
 
                 while (!scoreReader.eof()) {
-                    String line = scoreReader.readLine();
-                    if (line != null && !line.equals("")) {
-                        String[] parts = line.split(",");
+                    String strline = scoreReader.readLine();
+                    if (strline != null && !strline.equals("")) {
+                        String[] parts = strline.split(",");
                         if (parts.length == 3) {
                             names[count] = parts[0];
                             quizzes[count] = parts[1];
@@ -241,17 +241,17 @@ public class CPTJason {
                 for (int i = 0; i < count - 1; i++) {
                     for (int j = 0; j < count - i - 1; j++) {
                         if (scores[j] < scores[j + 1]) {
-                            int tempScore = scores[j];
+                            int inttempScore = scores[j];
                             scores[j] = scores[j + 1];
-                            scores[j + 1] = tempScore;
+                            scores[j + 1] = inttempScore;
 
-                            String tempName = names[j];
+                            String strtempName = names[j];
                             names[j] = names[j + 1];
-                            names[j + 1] = tempName;
+                            names[j + 1] = strtempName;
 
-                            String tempQuiz = quizzes[j];
+                            String strtempQuiz = quizzes[j];
                             quizzes[j] = quizzes[j + 1];
-                            quizzes[j + 1] = tempQuiz;
+                            quizzes[j + 1] = strtempQuiz;
                         }
                     }
                 }
@@ -286,7 +286,7 @@ public class CPTJason {
                 // Exit game
                 con.setDrawColor(Color.BLACK);
                 con.println("Thanks for playing!");
-                running = false;
+                blnrunning = false;
 
             } else if (strInput.equalsIgnoreCase("j")) {
                 // Secret screen (Jokes)
