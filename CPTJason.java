@@ -21,7 +21,6 @@ public class CPTJason {
         BufferedImage imgQuizchoiceBKG = con.loadImage("Quizchoice.png");
         BufferedImage imgJokesBKG = con.loadImage("Jokes.png");
 
-
         String strName = "";
         int intScore = 0;
         String strAnswer = "";
@@ -30,9 +29,10 @@ public class CPTJason {
         String quizName = "";
 
         boolean running = true;
+        Random random = new Random();
 
         while (running) {
-			con.setTextColor(Color.BLACK);
+            con.setTextColor(Color.BLACK);
             con.setDrawColor(Color.BLACK);
             con.clear();
             con.drawImage(imgHomePageBKG, 0, 0);
@@ -100,17 +100,16 @@ public class CPTJason {
                 quiz.close();
                 intNumQuestions /= 6;
 
-                String[][] strQuiz = new String[intNumQuestions][6];
+                String[][] strQuiz = new String[intNumQuestions][7];
                 TextInputFile quiz2 = new TextInputFile(selectedQuizFile);
                 for (int i = 0; i < intNumQuestions; i++) {
                     for (int j = 0; j < 6; j++) {
                         strQuiz[i][j] = quiz2.readLine();
                     }
+                    strQuiz[i][6] = String.valueOf(random.nextInt(100) + 1);
                 }
                 quiz2.close();
 
-                // Shuffle questions
-                Random random = new Random();
                 for (int i = 0; i < intNumQuestions; i++) {
                     int randIndex = random.nextInt(intNumQuestions);
                     String[] temp = strQuiz[i];
@@ -121,21 +120,23 @@ public class CPTJason {
                 for (int i = 0; i < intNumQuestions; i++) {
                     con.setDrawColor(Color.BLACK);
                     con.clear();
-                    con.print("User:" + strName);
-                    con.print("   Test:" + quizName );
-                    con.print("   Score:" + intScore + "/"+ i); 
+                    con.print("User: " + strName);
+                    con.print("   Test: " + quizName);
+                    con.print("   Score: " + intScore + "/" + i);
                     int intBScore = intPercentageScore(intScore, i);
-                    con.println("Percentage score" + intBScore +"%");
-        
+                    con.println("  Percentage score: " + intBScore + "%");
+
                     con.println("Q" + (i + 1) + ": " + strQuiz[i][0]);
                     con.println("A) " + strQuiz[i][1]);
                     con.println("B) " + strQuiz[i][2]);
                     con.println("C) " + strQuiz[i][3]);
                     con.println("D) " + strQuiz[i][4]);
+                    con.println("(ID: " + strQuiz[i][6] + ")");
                     con.print("Enter your answer (A/B/C/D): ");
                     strAnswer = con.readLine().toUpperCase();
 
-                    while (!strAnswer.equals("A") && !strAnswer.equals("B") && !strAnswer.equals("C") && !strAnswer.equals("D")) {
+                    while (!strAnswer.equals("A") && !strAnswer.equals("B") &&
+                           !strAnswer.equals("C") && !strAnswer.equals("D")) {
                         con.print("Invalid answer. Please enter A, B, C, or D: ");
                         strAnswer = con.readLine().toUpperCase();
                     }
@@ -150,7 +151,9 @@ public class CPTJason {
                     con.setDrawColor(Color.BLACK);
                     con.clear();
                     con.drawImage(imgScoreBKG, 0, 0);
-                    con.println(strName + ", your final score is: " + intScore + "/" + intNumQuestions);
+                    con.print(strName + ", your final score is: " + intScore + "/" + intNumQuestions);
+                    int intPercentage = intFinalScore(intScore, intNumQuestions);
+                    con.println(" or " + intPercentage + "%");
                     con.println();
                     con.println("Press M to return to the main menu and save your score.");
                     con.println("Press E to exit without saving.");
@@ -158,17 +161,16 @@ public class CPTJason {
                     String postGameInput = con.readLine();
 
                     if (postGameInput.equalsIgnoreCase("M")) {
-                        // Save score
                         TextOutputFile writer = new TextOutputFile("HighScore.txt", true);
-                        writer.println(strName + "," + quizName + "," + intScore);
+                        writer.println(strName + "," + quizName + "," + intPercentage);
                         writer.close();
                         con.println("Score saved! Returning to main menu...");
                         con.sleep(1500);
-                        postGame = false; // return to main menu
+                        postGame = false;
                     } else if (postGameInput.equalsIgnoreCase("E")) {
                         con.println("Thanks for playing!");
                         con.sleep(1500);
-                        running = false; // exit program
+                        running = false;
                         postGame = false;
                     } else {
                         con.println("Invalid input. Please try again.");
@@ -202,7 +204,6 @@ public class CPTJason {
                 }
                 scoreReader.close();
 
-                // Bubble sort by score descending
                 for (int i = 0; i < count - 1; i++) {
                     for (int j = 0; j < count - i - 1; j++) {
                         if (scores[j] < scores[j + 1]) {
@@ -263,12 +264,23 @@ public class CPTJason {
                 con.sleep(1500);
             }
         }
-       }
-       public static int intPercentageScore(int intScore, int i) {
-    int intBScore = 0;
-    if (i != 0) {
-        intBScore = (intScore * 100) / i;
+
+        con.closeConsole();  // Closes window on quit
     }
-    return intBScore;
-}
+
+    public static int intPercentageScore(int intScore, int i) {
+        int intBScore = 0;
+        if (i != 0) {
+            intBScore = (intScore * 100) / i;
+        }
+        return intBScore;
+    }
+
+    public static int intFinalScore(int intScore, int intNumQuestions) {
+        int intPercentage = 0;
+        if (intNumQuestions != 0) {
+            intPercentage = (intScore * 100) / intNumQuestions;
+        }
+        return intPercentage;
+    }
 }
