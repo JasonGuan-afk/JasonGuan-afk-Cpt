@@ -26,7 +26,7 @@ public class CPTJason {
         String strAnswer = "";
         String strCheat = "statitan";
         int intQuizchoice = 0;
-        String quizName = "";
+        String strquizName = "";
 
         boolean running = true;
         Random random = new Random();
@@ -76,7 +76,7 @@ public class CPTJason {
                     con.println("Invalid choice. Please enter 1, 2, or 3:");
                     intQuizchoice = con.readInt();
                 }
-                quizName = strQuizchoices[intQuizchoice - 1];
+                strquizName = strQuizchoices[intQuizchoice - 1];
 
                 String selectedQuizFile = "";
                 if (intQuizchoice == 1) {
@@ -121,7 +121,7 @@ public class CPTJason {
                     con.setDrawColor(Color.BLACK);
                     con.clear();
                     con.print("User: " + strName);
-                    con.print("   Test: " + quizName);
+                    con.print("   Test: " + strquizName);
                     con.print("   Score: " + intScore + "/" + i);
                     int intBScore = intPercentageScore(intScore, i);
                     con.println("  Percentage score: " + intBScore + "%");
@@ -162,7 +162,7 @@ public class CPTJason {
 
                     if (postGameInput.equalsIgnoreCase("M")) {
                         TextOutputFile writer = new TextOutputFile("HighScore.txt", true);
-                        writer.println(strName + "," + quizName + "," + intPercentage);
+                        writer.println(strName + "," + strquizName + "," + intPercentage);
                         writer.close();
                         con.println("Score saved! Returning to main menu...");
                         con.sleep(1500);
